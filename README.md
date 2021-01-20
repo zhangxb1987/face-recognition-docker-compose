@@ -1,1 +1,1 @@
-# face-recognition-docker-compose
+docker-compose up
