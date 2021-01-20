@@ -1,0 +1,29 @@
+version: "3.7"
+
+services: 
+  app: 
+    image: zxbdocker/face-recognition:latest
+    ports: 
+      - 8080:8080
+    volumes: 
+      - ./appdata:/var/local/data
+    depends_on: 
+      - mysql
+    environment: 
+      MYSQL_HOST: mysql
+      MYSQL_DB: face_recognition
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: password-of-root
+    entrypoint: ["./wait-for-it.sh", "mysql:3306", "--strict", "--timeout=60", "--",  "java", "-jar", "/usr/local/app/app.jar"]
+  mysql: 
+    image: mysql
+    ports: 
+      - 3306:3306
+    volumes: 
+      - face-recognition-mysql:/var/lib/mysql
+    environment: 
+      MYSQL_DATABASE: face_recognition
+      MYSQL_ROOT_PASSWORD: password-of-root
+
+volumes: 
+  face-recognition-mysql: 
